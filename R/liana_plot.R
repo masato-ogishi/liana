@@ -154,6 +154,7 @@ liana_dotplot <- function(liana_res,
 #'
 #' @inheritParams liana_dotplot
 #' @param cex label relative font size
+#' @param defaultColors (optional) a set of colors
 #'
 #' @param ... other paramters passed to `circlize::chordDiagram`
 #' @param transparency transparency
@@ -169,6 +170,7 @@ chord_freq <- function(liana_res,
                        transparency = 0.4,
                        facing = "clockwise",
                        adj = c(-0.5, 0.05),
+                       defaultColors = NULL,
                        ...){
 
     # Get Frequencies for the celltypes of interest
@@ -183,12 +185,15 @@ chord_freq <- function(liana_res,
 
     celltypes <- union(colnames(freqs), rownames(freqs))
 
-    grid.col <- grDevices::colorRampPalette(
+    if(is.null(defaultColors)){
+      defaultColors <- grDevices::colorRampPalette(
         (RColorBrewer::brewer.pal(n = 8, name = 'Dark2'))
-    )(length(celltypes)) %>%
+      )(length(celltypes))
+    }
+    grid.col <- defaultColors %>%
         setNames(celltypes)
 
-    # 4ord plot
+    # chord plot
     circlize::circos.clear()
     circlize::chordDiagram(freqs,
                            directional = 1,
@@ -271,6 +276,7 @@ liana_heatmap <- function(mat,
                           pallette = c("white", "violetred2"),
                           row_title = "Sender (Cell types)",
                           column_title = "Receiver (Cell types)",
+                          defaultColors = NULL,
                           ...){
 
     if(grid_text){
@@ -284,9 +290,12 @@ liana_heatmap <- function(mat,
 
     # define Annotations and Barplots
     cell_anno <- unique(rownames(mat))
-    cell_anno <- grDevices::colorRampPalette(
+    if(is.null(defaultColors)){
+      defaultColors <- grDevices::colorRampPalette(
         (RColorBrewer::brewer.pal(n = 8, name = 'Dark2'))
-    )(length(cell_anno)) %>%
+      )(length(celltypes))
+    }
+    cell_anno <- defaultColors %>%
         setNames(cell_anno)
 
     ## Annotations
