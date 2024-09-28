@@ -188,10 +188,10 @@ chord_freq <- function(liana_res,
     if(is.null(defaultColors)){
       defaultColors <- grDevices::colorRampPalette(
         (RColorBrewer::brewer.pal(n = 8, name = 'Dark2'))
-      )(length(celltypes))
-    }
-    grid.col <- defaultColors %>%
+      )(length(celltypes)) %>%
         setNames(celltypes)
+    }
+    grid.col <- defaultColors
 
     # chord plot
     circlize::circos.clear()
@@ -293,10 +293,10 @@ liana_heatmap <- function(mat,
     if(is.null(defaultColors)){
       defaultColors <- grDevices::colorRampPalette(
         (RColorBrewer::brewer.pal(n = 8, name = 'Dark2'))
-      )(length(celltypes))
+      )(length(celltypes)) %>%
+        setNames(celltypes)
     }
-    cell_anno <- defaultColors %>%
-        setNames(cell_anno)
+    cell_anno <- defaultColors
 
     ## Annotations
     ha_opts <- list(show_legend = FALSE,
